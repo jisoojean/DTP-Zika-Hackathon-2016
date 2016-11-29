@@ -5,7 +5,7 @@ from Bio import AlignIO
 
 script, input_file, output_file = argv
 
-needle_cline = NeedleCommandline(asequence="zika_ref_protein.fasta", bsequence=str(input_file), gapopen=10, gapextend=0.5, outfile=str(output_file))
+needle_cline = NeedleCommandline(asequence="zika_ref_aaseq.fasta", bsequence=str(input_file), gapopen=10, gapextend=0.5, outfile=str(output_file))
 stdout, strderr = needle_cline()
 
 align = AlignIO.read(str(output_file), "emboss")
