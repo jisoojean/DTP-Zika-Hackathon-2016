@@ -18,5 +18,3 @@ for i in range(align.get_alignment_length()):
 		pass
 	elif align[0,i] != align[1,i]:
 		list_mutations.append(i)
-
-print list_mutations
