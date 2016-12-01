@@ -30,7 +30,9 @@ Besides, both the ZIKV genome sequence of interest that is to be analysed and th
 ## Running
 Defaults in the code are setup so that if the following is run in a terminal:
 `zika_hackathon.py` it will prompt the user to specify the name of the file of the ZIKV genome sequence of interest as an argument.
+
 Then, the user will be asked whether the program should update the ZIKV genome sequences available at the [NCBI Virus Variation resource](https://www.ncbi.nlm.nih.gov/genome/viruses/variation/Zika/). If the updating option is selected, all ZIKV genome sequences will start to be downloaded. Running time for this step will be of around 4 minutes on a modern laptop.
+
 Total running time for the code will be dependent on the size of the dataset that is being compared to the input sequence.
 
 ## Expected output
