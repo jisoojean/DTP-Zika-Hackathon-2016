@@ -7,7 +7,6 @@ Since 2015, 69 countries have reported cases of Zika virus infection, with the m
 
 In the context of the ongoing ZIKV epidemic, we have developed a program to analyse a given ZIKV genome sequence (e.g. from samples collected during the outbreak) with respect to the existing ZIKV genome sequences from the NCBI database, providing an insight into the specific features of the strain of interest. Furthermore, it can be considered a valuable tool as it contributes to better understanding the origin and evolution of ZIKV and it provides a framework for analysing future viral outbreaks. 
 
-
 ## Aim
 This document shows how to use the program (**zika_hackathon.py**) to analyse a ZIKV genome sequence using database interrogation and phylogenetic tools, as well as genetic and proteomics analysis.
 
@@ -19,13 +18,16 @@ The aims of the program are:
 - To map mutations in the input ZIKV genome sequence by creating a graphical representation with the protein-coding sections from the reference genome.
 
 ## Prerequisities
-The following software modules are required to run the code (**reorder according to code**):
-- Python version 2.7
-- Numerical Python (NumPy)
-- Biological Python (BioPython) 
-- Python Plotting (MatPlotLib)
-Besides, both the ZIKV genome sequence of interest that is to be analysed and the reference ZIKV coding sequence (*zika_ref.fasta*) should be located in the working directory in FASTA format (*.fa* or *.fasta*).
+The code should be run on Python (Ver. 2.7.12 or above).
+The following Python modules are required for the execution of the code:
+- cogent (ver. 1.5.3)
+- biopython (ver. 1.68)
+- numpy (ver. 1.11.2)
+- matplotlib (ver. 1.5.3)
+- ete2 (ver. 2.3.10)
+All of them can be installed via Anaconda.
 
+Besides, both the ZIKV genome sequence of interest that is to be analysed and the reference ZIKV coding sequence (*zika_ref.fasta*) should be located in the working directory in FASTA format (*.fa* or *.fasta*).
 
 ## Running
 Defaults in the code are setup so that if the following is run in a terminal:
@@ -44,12 +46,9 @@ Once the program is run, a new empty directory will be created in the working di
 - Pairwise alignment of the input ZIKV amino acid sequence (*filename_aa_seq.fasta*) and the reference coding sequence (*zika_ref.fasta*): *filename_pwa.txt*
 - Graphical representation of the mutations obtained in the pairwise alignment (*filename_pwa.txt*): *filename_ZIKV.png*
 
-
 ## License
 Please see the document called LICENSE.md.
-
 
 ## References
 1. Brister JR, Bao Y, Zhdanov SA, Ostapchuck Y, Chetvernin V, Kiryutin B, Zaslavsky L, Kimelman M, Tatusova TA (2014). *Virus Variation Resource - recent updates and future directions*. Nucleic Acids Res. 42(Database issue):D660-5.
 2. Edgar, Robert C. (2004). *MUSCLE: multiple sequence alignment with high accuracy and high throughput*. Nucleic Acids Research 32(5): 1792-97.
-
