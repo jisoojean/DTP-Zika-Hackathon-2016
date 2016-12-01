@@ -5,7 +5,7 @@ Primarily transmitted during bloodmeal by Aedes aegypti mosquitoes vector, Zika 
 
 Since 2015, 69 countries have reported cases of Zika virus infection, with the majority in the Americas, but also parts of Asia. Most shockingly, ZIKV infection of pregnant women in the recent outbreak has been linked to head and brain malformations, including microcephaly in children at birth.
 
-In the context of the ongoing ZIKV epidemic, we have developed a program to analyse a given ZIKV genome sequence (e.g. from samples collected during the outbreak) with respect to the existing ZIKV genome sequences from the NCBI database, providing an insight into the specific features of the strain of interest. Furthermore, it can be considered a valuable tool as it contributes to better understanding of the origin and evolution of ZIKV and it provides a framework for analysing future viral outbreaks. 
+In the context of the ongoing ZIKV epidemic, we have developed a program to analyse a given ZIKV genome sequence (e.g. from samples collected during the outbreak) with respect to the existing ZIKV genome sequences from the NCBI database, providing an insight into the specific features of the strain of interest. Furthermore, it can be considered a valuable tool as it contributes to better understanding the origin and evolution of ZIKV and it provides a framework for analysing future viral outbreaks. 
 
 
 ## Aim
