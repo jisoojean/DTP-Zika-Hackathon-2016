@@ -2,66 +2,51 @@
 from sys import argv
 from Bio.Emboss.Applications import NeedleCommandline
 from Bio import AlignIO
+from cogent import DNA
+from cogent.core.genetic_code import DEFAULT as standard_code
+import os
 
 script, input_file = argv
 
-gencode = {
-    'ATA':'I', 'ATC':'I', 'ATT':'I', 'ATG':'M',
-    'ACA':'T', 'ACC':'T', 'ACG':'T', 'ACT':'T',
-    'AAC':'N', 'AAT':'N', 'AAA':'K', 'AAG':'K',
-    'AGC':'S', 'AGT':'S', 'AGA':'R', 'AGG':'R',
-    'CTA':'L', 'CTC':'L', 'CTG':'L', 'CTT':'L',
-    'CCA':'P', 'CCC':'P', 'CCG':'P', 'CCT':'P',
-    'CAC':'H', 'CAT':'H', 'CAA':'Q', 'CAG':'Q',
-    'CGA':'R', 'CGC':'R', 'CGG':'R', 'CGT':'R',
-    'GTA':'V', 'GTC':'V', 'GTG':'V', 'GTT':'V',
-    'GCA':'A', 'GCC':'A', 'GCG':'A', 'GCT':'A',
-    'GAC':'D', 'GAT':'D', 'GAA':'E', 'GAG':'E',
-    'GGA':'G', 'GGC':'G', 'GGG':'G', 'GGT':'G',
-    'TCA':'S', 'TCC':'S', 'TCG':'S', 'TCT':'S',
-    'TTC':'F', 'TTT':'F', 'TTA':'L', 'TTG':'L',
-    'TAC':'Y', 'TAT':'Y', 'TAA':'_', 'TAG':'_',
-    'TGC':'C', 'TGT':'C', 'TGA':'_', 'TGG':'W'}
-
 filename = ""
 for letter in input_file:
-	if letter == '.':
+	if letter == ".":
 		break
 	else:
 		filename += letter
 
-g = open("%s_aa_seq.fasta" % filename, "w")
-f = open(input_file, "r")
+f = open(input_file, 'r')
+g = open("%s_aa_seq.fasta" % filename, 'w')
 
-content = [x.strip("\n") for x in f.readlines()]
 genome_identity = ""
-RNA_Genome = ""
-for element in content:
-	if element.startswith(">"):
-		genome_identity += element
-	else:
-		RNA_Genome += element
+genome_seq = ""
+for line in f:
+	if line[0] == '>':
+		genome_identity = line.rstrip('\n')
+	else: 
+		genome_seq += line.rstrip('\n')
 
+seq = DNA.makeSequence(genome_seq)
+translated_seq = standard_code.sixframes(seq)
 
-start_codon = RNA_Genome.find("ATG")
-protein = ""
-for nucleotide in range(start_codon, len(RNA_Genome), 3):
-	codon= RNA_Genome[nucleotide:nucleotide+3]
-	if len(codon) < 3:
-		break	
-	else:
-			amino_acid = gencode[codon]
-			if amino_acid == "_":
-				break
-			else:
-				protein += amino_acid
+for frame in translated_seq:
+	protein = frame.split("*")
+	for peptide in protein:
+		if len(peptide) > 3000:
+			viral_protein = peptide
 
-g.write(genome_identity + "\n")
-g.write(protein)
+for number in range(len(viral_protein)):
+	if viral_protein[number] == "M":
+		viral_protein = viral_protein[number:]
+		break
+
+g.write(genome_identity + '\n')
+g.write(viral_protein)
+f.close()
 g.close()
 
 # Pairwise alignment by Needleman-Wunsch algorithm
-needle_cline = NeedleCommandline(asequence="zika_ref_aaseq.fasta", bsequence="%s_aa_seq.fasta" % filename, gapopen=10, gapextend=0.5, outfile="%s_pwa.txt" % filename)
+needle_cline = NeedleCommandline(asequence="zika_ref_aa_seq.fasta", bsequence="%s_aa_seq.fasta" % filename, gapopen=10, gapextend=0.5, outfile="%s_pwa.txt" % filename)
 stdout, strderr = needle_cline()
 
 # Converting the alignment result into a manipulable format
@@ -82,10 +67,6 @@ for i in range(length_of_alignment):
 		list_deletions.append(i)
 	elif align[0,i] != align[1,i]:
 		list_mutations.append(i)
-
-print list_mutations
-print list_deletions
-print list_insertions
 
 # Default library of protein locations in the genome
 protein_names = {
@@ -116,4 +97,5 @@ for insrt in list_insertions:
 		elif insrt > v[0] and insrt <= v[1]:
 			protein_names[k] = (v[0], v[1]+1)
 
-print protein_names
+os.system("mkdir %s" % filename)
+os.system("mv %s_aa_seq.fasta %s_pwa.txt %s" % (filename, filename, filename))
