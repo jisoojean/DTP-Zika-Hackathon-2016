@@ -9,7 +9,7 @@ In the context of the ongoing ZIKV epidemic, we have developed a program to anal
 
 
 ## Aim
-This document shows how to use the program (**Nameofpythoncode.py**) to analyse a ZIKV genome sequence using database interrogation and phylogenetic tools, as well as genetic and proteomics analysis.
+This document shows how to use the program (**zika_hackathon.py**) to analyse a ZIKV genome sequence using database interrogation and phylogenetic tools, as well as genetic and proteomics analysis.
 
 The aims of the program are:
 - To compare an input ZIKV genome sequence with the existing ZIKV genome sequences available at the [NCBI Virus Variation resource](https://www.ncbi.nlm.nih.gov/genome/viruses/variation/Zika/) (*Brister et al, 2014*) in real time by multiple sequence alignment (MSA) using MUSCLE (*Edgar and Robert, 2004*).
@@ -29,9 +29,9 @@ Besides, both the ZIKV genome sequence of interest that is to be analysed and th
 
 ## Running
 Defaults in the code are setup so that if the following is run in a terminal:
-`Nameofpythoncode.py` it will prompt the user to specify the name of the file of the ZIKV genome sequence of interest as an argument.
+`zika_hackathon.py` it will prompt the user to specify the name of the file of the ZIKV genome sequence of interest as an argument.
 Then, the user will be asked whether the program should update the ZIKV genome sequences available at the [NCBI Virus Variation resource](https://www.ncbi.nlm.nih.gov/genome/viruses/variation/Zika/). If the updating option is selected, all ZIKV genome sequences will start to be downloaded. Running time for this step will be of around 4 minutes on a modern laptop.
-Total running time for the code should be of approximately **x minutes** on a modern laptop.
+Total running time for the code will be dependent on the size of the dataset that is being compared to the input sequence.
 
 ## Expected output
 Once the program is run, a new empty directory will be created in the working directory, called *filename*. This directory will contain all the output files that have been generated, as follows:
