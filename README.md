@@ -48,6 +48,6 @@ Please see the document called LICENSE.md.
 
 
 ## References
-1. Brister JR, Bao Y, Zhdanov SA, Ostapchuck Y, Chetvernin V, Kiryutin B, Zaslavsky L, Kimelman M, Tatusova TA (2014). Virus Variation Resource - recent updates and future directions. Nucleic Acids Res. 42(Database issue):D660-5.
-2. Edgar, Robert C. (2004), MUSCLE: multiple sequence alignment with high accuracy and high throughput, Nucleic Acids Research 32(5), 1792-97.
+1. Brister JR, Bao Y, Zhdanov SA, Ostapchuck Y, Chetvernin V, Kiryutin B, Zaslavsky L, Kimelman M, Tatusova TA (2014). *Virus Variation Resource - recent updates and future directions*. Nucleic Acids Res. 42(Database issue):D660-5.
+2. Edgar, Robert C. (2004). *MUSCLE: multiple sequence alignment with high accuracy and high throughput*. Nucleic Acids Research 32(5): 1792-97.
 
