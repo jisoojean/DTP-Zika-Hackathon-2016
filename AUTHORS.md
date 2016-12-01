@@ -1,4 +1,5 @@
-List of authors (in alphabetical order)
+#List of authors 
+*(in alphabetical order)*
 
 - Beatriz Moreno Garcia
 - Dragos Mosneagu
@@ -7,5 +8,4 @@ List of authors (in alphabetical order)
 - Samuel Connell
 - Sheng Pong
 
-BioDTP16
-http://www.biodtp.ox.ac.uk/
+[BioDTP16](http://www.biodtp.ox.ac.uk/)
