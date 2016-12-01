@@ -1,0 +1,88 @@
+#!/usr/bin/env python
+
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy
+import operator 
+
+length_of_alignment = 3423
+
+# Creating a figure and setting its dimensions and axes
+fig = plt.figure(figsize=(25, 5.5))
+ax1 = fig.add_axes([0.05, 0.80, 0.9, 0.15])
+
+# Setting colour scheme of colourbar & defining no. of proteins in ZIKV
+cmap = plt.get_cmap('rainbow')
+protein_number = 11
+
+# numpy.linspace(x,y,z) creates z equally spaced digits between x and y
+# assign colour map value for each digit created
+colors = [cmap(i) for i in numpy.linspace(0,1,protein_number)] 
+# RGBA values printed if print colors: 11 colours created for 11 proteins
+
+# define protein regions by tuples in a dictionary 
+protein_names = {
+'C': (2, 104),
+'PrM': (123, 290),
+'E': (291, 790),
+'NS1': (791, 1142),
+'NS2A': (1143, 1368),
+'NSB': (1369, 1498),
+'NS3': (1499, 2115),
+'NS4A': (2116, 2242),
+'P2K': (2243, 2265),
+'NS4B': (2266, 2516),
+'NS5': (2517, 3419)} 
+
+bounds = [i[0] for index,i in enumerate(sorted(protein_names.values())) if index==0]
+for i in sorted(protein_names.values()):
+	bounds.append(i[1])
+
+# creating the horizontal colour bar with the defined bounds & label
+norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
+cb1 = mpl.colorbar.ColorbarBase(ax1, cmap=cmap,
+				norm=norm,
+				boundaries=bounds,
+				ticks=bounds,
+				spacing='proportional',
+				orientation='horizontal')
+cb1.set_label('Zika Virus, Encoded Proteins')
+
+# add protein names in appropriate colour blocks in the colour bar
+for protein in sorted(protein_names.items(), key=operator.itemgetter(1)):
+	ax1.text(numpy.mean([protein[1][0],protein[1][1]])/float(length_of_alignment), 0.3, protein[0],
+		verticalalignment='bottom', horizontalalignment='center',
+		transform=ax1.transAxes,
+		color='black', fontsize=12)
+
+# For every mutation, display a * above the colorbar at the mutation site
+for mutation in list_mutations:
+	ax1.text(mutation/float(length_of_alignment), 1.0, '*',
+		verticalalignment='bottom', horizontalalignment='center',
+		transform=ax1.transAxes,
+		color='black', fontsize=11)
+
+# For every insertion, display a + below the colorbar at the insertion site
+for mutation in list_insertions:
+	ax1.text(mutation/float(length_of_alignment), -0.3, '+',
+		verticalalignment='bottom', horizontalalignment='center',
+		transform=ax1.transAxes,
+		color='black', fontsize=15)
+
+# For every deletion, display a ^ below the colorbar at the deletion site
+for mutation in list_deletions:
+	ax1.text(mutation/float(length_of_alignment), -0.3, '^',
+		verticalalignment='bottom', horizontalalignment='center',
+		transform=ax1.transAxes,
+		color='black', fontsize=15)
+
+# Defining the contents of the legend
+legend_contents = 'Legend:\n     * = mutations\n     + = insertions\n     ^ = deletions'
+
+# Creating the legend 
+ax1.text(0, -2, legend_contents, style='normal',
+	bbox={'facecolor':'white', 'alpha':1, 'pad':10})
+
+# Show the finished plot with the legend and save it
+fig.savefig('ZIKV.png')
+plt.show()
