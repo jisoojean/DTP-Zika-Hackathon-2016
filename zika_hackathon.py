@@ -1,15 +1,23 @@
 #!/usr/bin/python
 import sys
 from sys import argv
-import numpy
+import os
+import urllib2
+import time
+import re
 import operator
+from cogent.parse.fasta import MinimalFastaParser
+from cogent import LoadSeqs,DNA
+from cogent.core.genetic_code import DEFAULT as standard_code
+from cogent.app.muscle import align_unaligned_seqs
+from cogent.app.fasttree import build_tree_from_alignment
 from Bio.Emboss.Applications import NeedleCommandline
 from Bio import AlignIO
-from cogent import DNA
-from cogent.core.genetic_code import DEFAULT as standard_code
+import numpy
 import matplotlib as mpl
+mpl.use('Qt4Agg')
 import matplotlib.pyplot as plt
-import os
+from ete2 import Tree, TreeStyle, NodeStyle
 
 sys.tracebacklimit = 0
 try:
@@ -24,6 +32,126 @@ for letter in input_file:
 	else:
 		filename += letter
 
+newseqid = str(raw_input ('Please input the new sequence ID: '))
+newseqcountry = str(raw_input ('Please input the country and region of origin: '))
+newseqyear = str(raw_input ('Which year was it sequenced in? '))
+newinfostr = ">"+newseqid+"|"+newseqcountry+"|"+newseqyear+'\n'
+
+accessionid = []
+
+start_time = time.time()
+ncbiupdate = raw_input ('Do you want to extract all ZIKV sequences from the NCBI database?(Y/N) ').upper()
+cycle = 0
+
+if ncbiupdate == 'Y':
+	os.system("rm zikv_database.fa")
+	fastafile = open('zikv_database.fa','a+')
+	sourcecode = urllib2.urlopen('https://www.ncbi.nlm.nih.gov/genomes/VirusVariation/Database/nph-select.cgi?cmd=show_query&country=any&genregion=any&go=database&host=Human&isolation=any&searchin=sequence&sequence=N&sonly=on&srcfilter_labs=include&taxid=64320')
+	content = sourcecode.read()
+	accession_list = re.findall('[A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9]', content)
+	print ('Found %s ZIKV complete sequenced genomes in the NCBI database.' % (len(set(accession_list))))
+	print ('Downloading the Fasta files..')
+	for accession in accession_list:
+		if accession not in accessionid:
+			accessionid.append(accession)
+			genbanksource = urllib2.urlopen('https://www.ncbi.nlm.nih.gov/nuccore/%s.1?report=gilist&log$=seqview&format=text' % (accession))
+			genbankcontent = genbanksource.read()
+			idcode = re.findall('[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]?', genbankcontent)
+			idcodestr = ''.join(map(str, idcode))
+			gbsource = urllib2.urlopen('https://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?tool=portal&save=file&log$=seqview&db=nuccore&report=genbank&sort=&id=%s&from=begin&to=end&extrafeat=976&maxplex=3' % (idcodestr))
+			gbcontent = gbsource.read()
+			gbfile = open('fasta.gbk', 'w+')
+			gbfile.write(gbcontent)
+			gbfile.seek(0)
+			for line in gbfile:
+				for part in line.split():
+					if "country=" in part:
+						x = line.split('"')
+						name = x[1]
+						nocolon=name.split(":")[0]
+						countryname=nocolon.replace(" ","_")
+					if "collection_date=" in part:
+						y = line.split('"')
+						collectiondate = y[1].split('-')
+						for item in collectiondate:
+							if len(item) == 4 and item.isdigit() == True:
+								collectionyear = item
+			seqident = ">"+str(accessionid[-1])+"|"+countryname+"|"+collectionyear+'\n'
+			fastafile.write(seqident)
+			fastasource = urllib2.urlopen('https://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?tool=portal&save=file&log$=seqview&db=nuccore&report=fasta&sort=&id=%s&from=begin&to=end&extrafeat=976' % (idcodestr))
+			fastacontent = fastasource.readlines()
+			for line in fastacontent:
+				if line[0]!=">":
+					fastafile.write(line.rstrip())
+			fastafile.write("\n")
+			gbfile.truncate()
+			cycle += 1
+			print ('Fasta file ')+(accessionid[-1])+(' downloaded; ')+str((100*(cycle/(float(len(set(accession_list)))))))+'%'+' completed..'
+
+	finaltime = round((((((time.time() - start_time)))/60)), 2)
+	print ('Downloaded all %s fasta files. ' % str(len(set(accession_list))))+('Total time: '+str(finaltime)+' minutes.')
+	os.remove('fasta.gbk')
+	gbfile.close()
+	fastafile.close()
+
+fastafile = open('zikv_database.fa','a+')
+
+fastafile.write(newinfostr)
+inputfile = open(input_file, 'r+')
+for line in inputfile.readlines():
+    if line[0]!=">":
+        fastafile.write(line.rstrip())
+fastafile.write("\n")
+fastafile.close()
+
+FastaFile = open("zikv_database.fa", 'r')
+InputSeq = MinimalFastaParser(FastaFile)
+Seq = LoadSeqs(data=InputSeq,moltype=DNA,aligned=False, label_to_name=lambda x: x.split("|")[0]+x.split("|")[1][0:10]+x.split("|")[2][0:4])
+
+FastaFile.close()
+
+print ('The input sequence has been appended to the database FASTA file.')
+
+print ('Aligning all sequences..')
+
+AlignedSeq = align_unaligned_seqs(Seq,DNA)
+print ('Building tree..')
+tree = build_tree_from_alignment(AlignedSeq,DNA)
+
+e = open("%s_phylotree.tre" % filename, 'w')
+
+e.write(tree.getNewick(with_distances=True))
+
+e.close()
+
+print "%s_phylotree.tre has been created." % filename
+
+t = Tree("%s_phylotree.tre" % filename, format=2)
+
+nodename = newseqid+newseqcountry[0:10]+newseqyear[0:4]
+
+n = t.search_nodes(name=nodename)
+
+midpoint = t.get_midpoint_outgroup()
+
+t.set_outgroup(midpoint)
+
+ts = TreeStyle()
+ts.show_leaf_name = True
+ts.mode = "c"
+ts.arc_start = -180
+ts.arc_span = 360
+
+nst = NodeStyle()
+nst["bgcolor"] = "LightSteelBlue"
+
+n[0].set_style(nst)
+
+t.render("%s_phylotree.png" % filename, w = 500, units="mm", tree_style=ts)
+
+FastaFile.close()
+e.close()
+
 f = open(input_file, 'r')
 g = open("%s_aa_seq.fasta" % filename, 'w')
 
@@ -32,7 +160,7 @@ genome_seq = ""
 for line in f:
 	if line[0] == '>':
 		genome_identity = line.rstrip('\n')
-	else: 
+	else:
 		genome_seq += line.rstrip('\n')
 
 print "Translating your input DNA sequence..."
@@ -87,6 +215,7 @@ for i in range(length_of_alignment):
 		list_substitutions.append(i)
 
 print "Generating the graph of your proteome..."
+
 # Creating a figure and setting its dimensions and axes
 fig = plt.figure(figsize=(20, 5.0))
 ax1 = fig.add_axes([0.05, 0.60, 0.9, 0.15])
@@ -184,4 +313,4 @@ fig.savefig('%s_proteome.png' % filename)
 print "%s_proteome.png has been created." % filename
 
 os.system("mkdir %s" % filename)
-os.system("mv %s_aa_seq.fasta %s_pwa.txt %s_proteome.png %s" % (filename, filename, filename, filename))
+os.system("mv %s_aa_seq.fasta %s_pwa.txt %s_proteome.png %s_phylotree.tre %s_phylotree.png %s" % (filename, filename, filename, filename, filename, filename))
