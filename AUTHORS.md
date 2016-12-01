@@ -8,4 +8,6 @@
 - Samuel Connell
 - Sheng Pong
 
-[BioDTP16](http://www.biodtp.ox.ac.uk/)
+[Interdisciplinary Bioscience (BBSRC DTP)](http://www.biodtp.ox.ac.uk/)
+
+[University of Oxford](http://www.ox.ac.uk/)
