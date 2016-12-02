@@ -128,7 +128,7 @@ print "%s_phylotree.tre has been created." % filename
 
 t = Tree("%s_phylotree.tre" % filename)
 
-nodename = newseqid+newseqcountry[0:10]+newseqyear[0:4]
+nodename = newseqid+newseqcountry[0:10].replace(" ","_")+newseqyear[0:4]
 
 n = t.search_nodes(name=nodename)
 
