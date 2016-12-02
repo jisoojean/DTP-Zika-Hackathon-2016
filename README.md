@@ -29,6 +29,7 @@ The following Python modules are required for the execution of the code:
 - numpy (ver. 1.11.2)
 - matplotlib (ver. 1.5.3)
 - ete3 (ver. 3.0.0b36)
+- pyqt (ver. 4.11.4)
 
 All of them can be installed via Anaconda.
 
