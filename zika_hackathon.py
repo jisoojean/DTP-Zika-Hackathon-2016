@@ -86,8 +86,6 @@ if ncbiupdate == 'Y':
 			fastafile.write("\n")
 			gbfile.truncate()
 			cycle += 1
-			if cycle == 3:
-				break
 			print ('Fasta file ')+(accessionid[-1])+(' downloaded; ')+str((100*(cycle/(float(len(set(accession_list)))))))+'%'+' completed..'
 
 	finaltime = round((((((time.time() - start_time)))/60)), 2)
