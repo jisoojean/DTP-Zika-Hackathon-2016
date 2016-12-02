@@ -22,12 +22,14 @@ The aims of the program are:
 
 ## Prerequisities
 The code should be run on Python (ver. 2.7.12 or above).
+
 The following Python modules are required for the execution of the code:
 - cogent (ver. 1.5.3)
 - biopython (ver. 1.68)
 - numpy (ver. 1.11.2)
 - matplotlib (ver. 1.5.3)
 - ete3 (ver. 3.0.0b36)
+
 All of them can be installed via Anaconda.
 
 Besides, both the ZIKV genome sequence of interest that is to be analysed and the reference ZIKV coding sequence (*zika_ref.fasta*) should be located in the working directory in FASTA format (*.fa* or *.fasta*). The reference ZIKV coding sequence (*zika_ref.fasta*) is available in the *data* folder of this repository.
