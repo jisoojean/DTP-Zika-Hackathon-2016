@@ -58,7 +58,7 @@ Once the program is run, a new empty directory will be created in the working di
 ## Running Sample Code
 A ZIKV genome sample sequence file (*test1.fasta*) is provided to test the program, available in the *test* folder. The reference ZIKV coding sequence (*zika_ref.fasta*) is provided too and it can be found in the *data* folder.
 
-Therefore, to analyse the sample file, the following would be run in a terminal: `python ./zika_hackathon.py test1.fasta`. 
+Therefore, to analyse the sample file, the following would be run in a terminal: `python zika_hackathon.py test1.fasta`. 
 
 The user will be asked to insert the name or ID of the sample (e.g. test1), the country of origin (e.g. Brazil) and year of collection (e.g. 2016). 
 
