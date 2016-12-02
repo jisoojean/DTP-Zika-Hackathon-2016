@@ -17,7 +17,7 @@ import numpy
 import matplotlib as mpl
 mpl.use('Qt4Agg')
 import matplotlib.pyplot as plt
-from ete2 import Tree, TreeStyle, NodeStyle
+from ete3 import Tree, TreeStyle, NodeStyle
 
 sys.tracebacklimit = 0
 try:
@@ -86,6 +86,8 @@ if ncbiupdate == 'Y':
 			fastafile.write("\n")
 			gbfile.truncate()
 			cycle += 1
+			if cycle == 3:
+				break
 			print ('Fasta file ')+(accessionid[-1])+(' downloaded; ')+str((100*(cycle/(float(len(set(accession_list)))))))+'%'+' completed..'
 
 	finaltime = round((((((time.time() - start_time)))/60)), 2)
@@ -126,7 +128,7 @@ e.close()
 
 print "%s_phylotree.tre has been created." % filename
 
-t = Tree("%s_phylotree.tre" % filename, format=2)
+t = Tree("%s_phylotree.tre" % filename)
 
 nodename = newseqid+newseqcountry[0:10]+newseqyear[0:4]
 
@@ -163,7 +165,7 @@ for line in f:
 	else:
 		genome_seq += line.rstrip('\n')
 
-print "Translating your input DNA sequence..."
+print "Translating your input DNA sequence.."
 
 seq = DNA.makeSequence(genome_seq)
 translated_seq = standard_code.sixframes(seq)
@@ -186,7 +188,7 @@ g.close()
 
 print "%s_aa_seq.fasta has been created." % filename
 
-print "Aligning the translated sequence with the reference amino acid sequence..."
+print "Aligning the translated sequence with the reference amino acid sequence.."
 
 # Pairwise alignment by Needleman-Wunsch algorithm
 needle_cline = NeedleCommandline(asequence="zika_ref.fasta", bsequence="%s_aa_seq.fasta" % filename, gapopen=10, gapextend=0.5, outfile="%s_pwa.txt" % filename)
@@ -214,7 +216,7 @@ for i in range(length_of_alignment):
 	elif align[0,i] != align[1,i]:
 		list_substitutions.append(i)
 
-print "Generating the graph of your proteome..."
+print "Generating the graph of your proteome.."
 
 # Creating a figure and setting its dimensions and axes
 fig = plt.figure(figsize=(20, 5.0))
