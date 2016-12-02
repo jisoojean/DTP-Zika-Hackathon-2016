@@ -21,35 +21,52 @@ The aims of the program are:
 
 
 ## Prerequisities
-The code should be run on Python (Ver. 2.7.12 or above).
+The code should be run on Python (ver. 2.7.12 or above).
 The following Python modules are required for the execution of the code:
 - cogent (ver. 1.5.3)
 - biopython (ver. 1.68)
 - numpy (ver. 1.11.2)
 - matplotlib (ver. 1.5.3)
-- ete2 (ver. 2.3.10)
+- ete3 (ver. 3.0.0b36)
 All of them can be installed via Anaconda.
 
-Besides, both the ZIKV genome sequence of interest that is to be analysed and the reference ZIKV coding sequence (*zika_ref.fasta*) should be located in the working directory in FASTA format (*.fa* or *.fasta*).
+Besides, both the ZIKV genome sequence of interest that is to be analysed and the reference ZIKV coding sequence (*zika_ref.fasta*) should be located in the working directory in FASTA format (*.fa* or *.fasta*). The reference ZIKV coding sequence (*zika_ref.fasta*) is available in the *data* folder of this repository.
 
 
 ## Running
 Defaults in the code are setup so that if the following is run in a terminal:
-`zika_hackathon.py` it will prompt the user to specify the name of the file of the ZIKV genome sequence of interest as an argument.
+`python zika_hackathon.py *inputsequencefile.fasta*` (i.e. **the name of the input file should be specified as an argument when running the code**) the user will be asked to insert the name or ID of the sample (e.g. test1), the country of origin (e.g. Brazil) and year of collection (2016).
 
 Then, the user will be asked whether the program should update the ZIKV genome sequences available at the [NCBI Virus Variation resource](https://www.ncbi.nlm.nih.gov/genome/viruses/variation/Zika/). If the updating option is selected, all ZIKV genome sequences will start to be downloaded. Running time for this step will be of around 4 minutes on a modern laptop.
 
 Total running time for the code will be dependent on the size of the dataset that is being compared to the input sequence.
 
 
-## Expected output
+## Expected Output
 Once the program is run, a new empty directory will be created in the working directory, called *filename*. This directory will contain all the output files that have been generated, as follows:
-- Complete set of existing ZIKV genome sequences available at the NCBI Virus Variation resource: *zikv_database.fa*
-- Interactive phylogenetic tree in the ETE Tree Browser. 
-- Graphical representation of the phylogenetic tree containing the input ZIKV genome sequence and the existing ZIKV genome sequences (*zikv_database.fa*): *filename_phylotree.png*
 - Amino acid sequence generated as of the input ZIKV genome sequence: *filename_aa_seq.fasta*
-- Pairwise alignment of the input ZIKV amino acid sequence (*filename_aa_seq.fasta*) and the reference coding sequence (*zika_ref.fasta*): *filename_pwa.txt*
+- Graphical representation of the phylogenetic tree containing the input ZIKV genome sequence and the existing ZIKV genome sequences (*zikv_database.fa*): *filename_phylotree.png*
+- Phylogenetic tree in Newick tree format: *filename_phylotree.tre* 
 - Graphical representation of the mutations obtained in the pairwise alignment (*filename_pwa.txt*): *filename_ZIKV.png*
+- Pairwise alignment of the input ZIKV amino acid sequence (*filename_aa_seq.fasta*) and the reference coding sequence (*zika_ref.fasta*): *filename_pwa.txt*
+- Complete set of existing ZIKV genome sequences available at the NCBI Virus Variation resource: *zikv_database.fa*
+
+
+## Running Sample Code
+A ZIKV genome sample sequence file (*test1.fasta*) is provided to test the program, available in the *test* folder. The reference ZIKV coding sequence (*zika_ref.fasta*) is provided too and it can be found in the *data* folder.
+
+Therefore, to analyse the sample file, the following would be run in a terminal: `python ./zika_hackathon.py test1.fasta`. 
+
+The user will be asked to insert the name or ID of the sample (e.g. test1), the country of origin (e.g. Brazil) and year of collection (2016). 
+
+Then, the user will be prompted to state if the database should be downloaded from the [NCBI Virus Variation resource](https://www.ncbi.nlm.nih.gov/genome/viruses/variation/Zika/). However, a sample database (*zikv_database.fa*) is provided in the *test* folder.
+
+After this, output files will start to be generated in a newly created directory (*test1*) within the working directory. Output sample files can be found in the *test/output* folder of this repository:
+- Amino acid sequence of the input ZIKV sequence, in FASTA format: *test1_aa_seq.fasta*
+- Image of the phylogenetic tree: *test1_phylotree.png*
+- Phylogenetic tree in Newick tree format: *test1_phylotree.tre*
+- Map of the mutations found in the input ZIKV sequence with respect to the reference ZIKV coding sequence: *test1_proteome.png*
+- Pairwise alignment of the input ZIKV amino acid sequence (*test1_aa_seq.fasta*) and the reference coding sequence (*zika_ref.fasta*): *test1_pwa.txt*
 
 
 ## License
