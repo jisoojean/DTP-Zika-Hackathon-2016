@@ -37,7 +37,7 @@ Besides, both the ZIKV genome sequence of interest that is to be analysed and th
 
 ## Running
 Defaults in the code are setup so that if the following is run in a terminal:
-`python zika_hackathon.py *inputsequencefile.fasta*` (i.e. **the name of the input file should be specified as an argument when running the code**) the user will be asked to insert the name or ID of the sample (e.g. test1), the country of origin (e.g. Brazil) and year of collection (2016).
+`python zika_hackathon.py inputsequencefile.fasta` (i.e. **the name of the input file should be specified as an argument when running the code**) the user will be asked to insert the name or ID of the sample (e.g. test1), the country of origin (e.g. Brazil) and year of collection (2016).
 
 Then, the user will be asked whether the program should update the ZIKV genome sequences available at the [NCBI Virus Variation resource](https://www.ncbi.nlm.nih.gov/genome/viruses/variation/Zika/). If the updating option is selected, all ZIKV genome sequences will start to be downloaded. Running time for this step will be of around 4 minutes on a modern laptop.
 
